@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-config
-  namespace: test-psql
-data:
-  POSTGRES_DB: plxdatabase
-  POSTGRES_USER: plxuser
-  POSTGRES_PASSWORD: plx1234

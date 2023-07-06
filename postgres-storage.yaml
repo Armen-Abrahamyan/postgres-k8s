@@ -1,10 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: postgres-deployment
-  namespace: test-psql
+  name: postgres
 spec:
-  replicas: 1
+  serviceName: postgres
+  replicas: 3
   selector:
     matchLabels:
       app: postgres
@@ -18,13 +18,22 @@ spec:
           image: postgres:latest
           ports:
             - containerPort: 5432
-          envFrom:
-            - configMapRef:
-                name: postgres-config
+          env:
+            - name: POSTGRES_DB
+              value: plx-database
+            - name: POSTGRES_USER
+              value: plx-user
+            - name: POSTGRES_PASSWORD
+              value: plx1234
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: postgres-storage
-          persistentVolumeClaim:
-            claimName: postgres-pvc
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: your-storage-class
+        resources:
+          requests:
+            storage: 8Gi
