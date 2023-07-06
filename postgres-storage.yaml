@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
+  namespace: test-postgres
 spec:
   serviceName: postgres
   replicas: 3
@@ -27,7 +28,7 @@ spec:
               value: plx1234
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql/data
+              mountPath: /usr/local/pgsql/data
   volumeClaimTemplates:
     - metadata:
         name: postgres-storage
